@@ -22,14 +22,14 @@
         return Object.keys(temps).map((sensorName) => {
           const temp = temps[sensorName]
           return {
-            x: temps[sensorName],
-            y: date
+            x: date,
+            y: temps[sensorName]
           }
         })
       }).reduce((accum, points) => {
         points.forEach((p, i) => {
-          if (!accum[i]) accum[i] = []
-          accum[i].push(p)
+          if (!accum[i]) accum[i] = { data: [] }
+          accum[i].data.push(p)
           return accum
         })
       }, [])
