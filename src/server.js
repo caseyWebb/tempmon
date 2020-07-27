@@ -5,8 +5,10 @@ const express = require('express')
 const app = express()
 const { DATA_FILE, PORT } = process.env
 
-app.use(express.static(path.resolve(__dirname, '../public')))
-app.get('/data', (req, res) => res.sendFile(DATA_FILE))
-app.get('/current', (req, res) => res.json(sensor.getAll()))
+exports.start = () => {
+  app.use(express.static(path.resolve(__dirname, '../public')))
+  app.get('/data', (req, res) => res.sendFile(DATA_FILE))
+  app.get('/current', (req, res) => res.json(sensor.getAll()))
 
-app.listen(PORT)
+  app.listen(PORT)
+}
