@@ -1,1 +1,46 @@
-Hello, World!
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tempmon</title>
+</head>
+
+<body>
+  <canvas id="graph" height="100%" width="100%"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"
+    integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
+    crossorigin="anonymous"></script>
+  <script>
+    const ctx = document.getElementById('graph').getContext('2d');
+
+    fetch('data').then((res) => res.json()).then(() => {
+      const datasets = data.map(([unixTime, temps]) => {
+        const date = new Date(unixTime * 1000)
+        return Object.keys(temps).map((sensorName) => {
+          const temp = temps[sensorName]
+          return {
+            x: temps[sensorName],
+            y: date
+          }
+        })
+      }).reduce((accum, points) => {
+        points.forEach((p, i) => {
+          if (!accum[i]) accum[i] = []
+          accum[i].push(p)
+        })
+      }, [])
+
+      const myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
