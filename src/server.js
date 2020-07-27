@@ -1,6 +1,7 @@
 'use strict'
 
 const path = require('path')
+const sensor = require('ds18x20')
 const express = require('express')
 const app = express()
 const { DATA_FILE, PORT } = process.env
