@@ -30,6 +30,7 @@
         points.forEach((p, i) => {
           if (!accum[i]) accum[i] = []
           accum[i].push(p)
+          return accum
         })
       }, [])
 
