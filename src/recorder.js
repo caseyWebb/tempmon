@@ -3,6 +3,7 @@ const sensor = require('ds18x20')
 const { DATA_FILE, UPDATE_INTERVAL } = process.env
 
 exports.start = () => {
+  recordCurrentTemps()
   setInterval(recordCurrentTemps, UPDATE_INTERVAL * 60 * 1000)
 }
 
