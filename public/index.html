@@ -13,6 +13,14 @@
     integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
     crossorigin="anonymous"></script>
   <script>
+    const colors = [
+      '#8EDFD9',
+      '#37CF62',
+      '#53A8A5',
+      '#00746C',
+      '#030E46'
+    ]
+
     const ctx = document.getElementById('graph').getContext('2d');
 
     fetch('data').then((res) => res.json()).then((data) => {
@@ -31,7 +39,11 @@
         })
       }).reduce((accum, points) => {
         points.forEach(({ label, point }, i) => {
-          if (!accum[i]) accum[i] = { label, data: [] }
+          if (!accum[i]) accum[i] = {
+            label,
+            borderColor: colors[i],
+            data: []
+          }
           accum[i].data.push(point)
         })
         return accum
