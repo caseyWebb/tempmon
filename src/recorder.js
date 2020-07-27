@@ -1,3 +1,5 @@
+'use strict'
+
 const fs = require('fs-extra')
 const sensor = require('ds18x20')
 const { DATA_FILE, UPDATE_INTERVAL } = process.env
