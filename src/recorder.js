@@ -25,4 +25,6 @@ async function recordCurrentTemps() {
     if (!data[sensorId]) data[sensorId] = []
     data[sensorId].push(entry)
   })
+
+  await fs.outputJSON(DATA_FILE, data)
 }
