@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <canvas id="graph" height="100%" width="100%"></canvas>
+  <canvas id="graph" height="100%"></canvas>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"
     integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
     crossorigin="anonymous"></script>
@@ -18,7 +18,7 @@
     fetch('data').then((res) => res.json()).then((data) => {
       window.data = data
       const datasets = data.map(([unixTime, temps]) => {
-        const date = new Date(unixTime * 1000)
+        const date = new Date(unixTime)
         return Object.keys(temps).map((sensorName) => {
           const temp = temps[sensorName]
           return {
