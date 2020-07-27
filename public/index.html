@@ -50,7 +50,16 @@
                 unit: 'hour'
               },
               min: new Date(new Date().setDate(new Date().getDate() - 1))
-            }]
+            }],
+            yAxes: [
+              {
+                type: 'linear',
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Temperature (Celsius)'
+                }
+              }
+            ]
           }
         }
       })
