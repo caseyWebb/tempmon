@@ -15,7 +15,7 @@
   <script>
     const ctx = document.getElementById('graph').getContext('2d');
 
-    fetch('data').then((res) => res.json()).then(() => {
+    fetch('data').then((res) => res.json()).then((data) => {
       const datasets = data.map(([unixTime, temps]) => {
         const date = new Date(unixTime * 1000)
         return Object.keys(temps).map((sensorName) => {
