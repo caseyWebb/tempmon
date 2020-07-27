@@ -30,8 +30,8 @@
         points.forEach((p, i) => {
           if (!accum[i]) accum[i] = { data: [] }
           accum[i].data.push(p)
-          return accum
         })
+        return accum
       }, [])
 
       const myLineChart = new Chart(ctx, {
