@@ -37,11 +37,20 @@
         return accum
       }, [])
 
-      const myLineChart = new Chart(ctx, {
+      const chart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: [],
           datasets
+        },
+        options: {
+          scales: {
+            xAxes: [{
+              type: 'time',
+              time: {
+                unit: 'hour'
+              }
+            }]
+          }
         }
       })
     })
