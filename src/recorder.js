@@ -12,20 +12,22 @@ exports.getData = () => {
 }
 
 async function recordCurrentTemps() {
+  const data = fs.existsSync(DATA_FILE) ? await fs.readJSON(DATA_FILE) : []
   const current = sensor.getAll()
-  const data = fs.existsSync(DATA_FILE) ? await fs.readJSON(DATA_FILE) : {}
-  const time = Date.now()
+  const entry = [Date.now(), current]
 
   console.log(current)
 
-  Object.keys(current).forEach((sensorId, temp) => {
-    const entry = {
-      time,
-      temp
-    }
-    if (!data[sensorId]) data[sensorId] = []
-    data[sensorId].push(entry)
-  })
+  data.push(entry)
 
   await fs.outputJSON(DATA_FILE, data)
 }
+
+/**
+ * JSON Schema
+ *
+ * [
+ *   [time, { sensor1: temp1, sensor2: temp2, ... }],
+ *   ...
+ * ]
+ */
