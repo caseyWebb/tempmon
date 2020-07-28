@@ -12,6 +12,11 @@
   <link rel="manifest" href="/site.webmanifest">
 
   <style>
+    body,
+    html {
+      height: 100%;
+    }
+
     .sensors {
       display: flex;
       justify-content: space-evenly;
@@ -32,7 +37,7 @@
       font-size: 16px;
     }
 
-    .loader-container {
+    #loader {
       width: 100%;
       display: flex;
       justify-content: center;
@@ -71,7 +76,7 @@
 </head>
 
 <body>
-  <div class="loader-container">
+  <div id="loader">
     <div class="lds-dual-ring"></div>
   </div>
 
@@ -153,6 +158,7 @@
         updateCurrent(current)
         currentAutoUpdate()
         ko.applyBindings(viewModel, document.body)
+        document.getElementById('loader').remove()
       })
 
       setInterval(() => {
