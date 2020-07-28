@@ -23,8 +23,11 @@
     const labels = JSON.parse(localStorage.getItem('labels')) || {}
     const ctx = document.getElementById('graph').getContext('2d');
 
-    fetch('data').then((res) => res.json()).then((data) => {
-      window.data = data
+    const [data, current] = Promise.all([
+      fetch('data').then((res) => res.json()),
+      fetch('current').then((res) => res.json())
+    ]).then(([data, current]) => {
+      data.push([Date.now(), current])
       const datasets = data.map(([unixTime, temps]) => {
         const date = new Date(unixTime)
         return Object.keys(temps).map((sensor) => {
