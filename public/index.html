@@ -9,7 +9,12 @@
 
 <body>
   <!-- ko if: ready -->
-
+  <!-- ko foreach: sensors -->
+  <div data-bind="style: { color: color, borderColor: color }">
+    <span data-bind="text: temp"></span>
+    <span data-bind="text: label"></span>
+  </div>
+  <!-- /ko -->
   <!-- /ko -->
   <canvas id="daily-graph" height="100%"></canvas>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.min.js"
@@ -30,9 +35,8 @@
     const ctx = document.getElementById('daily-graph').getContext('2d')
     const viewModel = {
       ready: ko.observable(false),
-      current: ko.observableArray()
+      sensors: ko.observableArray([])
     }
-
 
     const fetchHistoricalData = () => fetch('data', { cache: 'no-cache' }).then((res) => res.json())
     const fetchCurrent = () => fetch('current', { cache: 'no-cache' }).then((res) => res.json())
@@ -92,8 +96,9 @@
     }
 
     function updateCurrent(data) {
-      viewModel.current(
-        Object.keys(data).map((sensor) => ({
+      viewModel.sensors(
+        Object.keys(data).map((sensor, i) => ({
+          color: colors[i],
           label: labels[sensor] || sensor,
           temp: data[sensor]
         }))
