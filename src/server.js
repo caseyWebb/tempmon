@@ -14,7 +14,10 @@ exports.start = () => {
 
   app.use(express.static(path.resolve(__dirname, '../public')))
   app.get('/data', (req, res) => res.sendFile(DATA_FILE))
-  app.get('/current', (req, res) => res.json(sensor.getAll()))
+  app.get('/current', (req, res) => sensor.getAll((err, data) => {
+    if (err) res.err(err)
+    else res.json(data)
+  }))
 
   app.listen(PORT)
 }
