@@ -11,6 +11,8 @@ exports.start = () => {
   setInterval(iterate, 60 * 1000)
 }
 
+exports.current = memo
+
 async function iterate() {
   const data = sensor.getAll()
   const updated = Object.keys(data).reduce((accum, sensorId) => {
