@@ -8,7 +8,12 @@
 </head>
 
 <body>
-  <canvas id="graph" height="100%"></canvas>
+  <!-- ko if: ready -->
+
+  <!-- /ko -->
+  <canvas id="daily-graph" height="100%"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-min.js" integrity=""
+    crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"
     integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
     crossorigin="anonymous"></script>
@@ -21,15 +26,20 @@
       '#030E46'
     ]
     const labels = JSON.parse(localStorage.getItem('labels')) || {}
-    const ctx = document.getElementById('graph').getContext('2d');
+    const ctx = document.getElementById('daily-graph').getContext('2d')
+    const viewModel = {
+      ready: ko.observable(false),
+      current: ko.observableArray()
+    }
 
-    Promise.all([
-      fetch('data').then((res) => res.json()),
-      fetch('current').then((res) => res.json())
-    ]).then(([data, current]) => {
-      data.push([Date.now(), current])
-      const datasets = data.map(([unixTime, temps]) => {
-        const date = new Date(unixTime)
+    initialize()
+
+    const fetchHistoricalData = () => fetch('data').then((res) => res.json())
+    const fetchCurrent = () => fetch('current').then((res) => res.json())
+
+    function createChartDatasets(data) {
+      return data.map(([_date, temps]) => {
+        const date = new Date(_date)
         return Object.keys(temps).map((sensor) => {
           const temp = temps[sensor]
           return {
@@ -52,8 +62,45 @@
         })
         return accum
       }, [])
+    }
 
-      const chart = new Chart(ctx, {
+    function initialize() {
+      Promise.all([
+        fetchHistoricalData(),
+        fetchCurrent()
+      ]).then(([data, current]) => {
+        drawDailyChart(
+          createChartDatasets([...data, [Date.now(), current]])
+        )
+        updateCurrent(current)
+        viewModel.ready(true)
+      })
+
+      setInterval(() => {
+        fetchCurrent().then(updateCurrent)
+      }, 5000) // 5 sec
+
+      setInterval(() => {
+        Promise.all([
+          fetchHistoricalData(),
+          fetchCurrent()
+        ]).then(([data, current]) => drawDailyChart(
+          createChartDatasets([...data, [Date.now(), current]])
+        ))
+      }, 5 * 60 * 1000) // 5 min
+    }
+
+    function updateCurrent(data) {
+      viewModel.current(
+        Object.keys(data).map((sensor) => ({
+          label: labels[sensor] || sensor,
+          temp: data[sensor]
+        }))
+      )
+    }
+
+    function drawDailyChart(datasets) {
+      return new Chart(ctx, {
         type: 'line',
         data: {
           datasets
@@ -79,7 +126,7 @@
           }
         }
       })
-    })
+    }
   </script>
 </body>
 
