@@ -125,14 +125,14 @@
     }
 
     function updateCurrent(data) {
-      viewModel.sensors(
-        Object.keys(data).map((sensor, i) => ({
-          sensor,
-          color: colors[i],
-          label: labels[sensor] || sensor,
-          temp: data[sensor]
-        }))
-      )
+      const sensors = Object.keys(data).map((sensor, i) => ({
+        sensor,
+        color: colors[i],
+        label: labels[sensor] || sensor,
+        temp: data[sensor]
+      }))
+      viewModel.sensors(sensors)
+      document.title = sensors.map(({ label, temp }) => `${label}: ${temp}`).join(' | ')
     }
 
     function drawDailyChart(datasets) {
