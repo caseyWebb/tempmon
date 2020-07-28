@@ -54,13 +54,12 @@
       '#030E46'
     ]
     const labelStorageKey = 'labels'
-    const labels = JSON.parse(localStorage.getItem(labelStorageKey)) || {}
+    let labels = JSON.parse(localStorage.getItem(labelStorageKey)) || {}
     const ctx = document.getElementById('daily-graph').getContext('2d')
     const viewModel = {
       sensors: ko.observableArray([]),
       aliasSensor: ({ sensor }) => {
         const alias = prompt(`Enter alias for ${sensor}`)
-        const labels = JSON.parse(localStorage.getItem(labelStorageKey)) || {}
         labels[sensor] = alias
         localStorage.setItem(labelStorageKey, JSON.stringify(labels))
       }
