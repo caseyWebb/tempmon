@@ -29,7 +29,7 @@
 <body>
   <div class="sensors">
     <!-- ko foreach: sensors -->
-    <div data-bind="style: { color: color, borderColor: color }">
+    <div class="sensor" data-bind="style: { color: color, borderColor: color }">
       <div class="temp" data-bind="text: temp"></div>
       <div class="label" data-bind="text: label"></div>
     </div>
