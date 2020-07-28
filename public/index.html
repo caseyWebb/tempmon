@@ -62,7 +62,7 @@
         const alias = prompt(`Enter alias for ${sensor}`)
         const labels = JSON.parse(localStorage.getItem(labelStorageKey)) || {}
         labels[sensor] = alias
-        localStorage.setItem(labels)
+        localStorage.setItem(labelStorageKey, labels)
       }
     }
 
