@@ -8,7 +8,7 @@ const memo = sensor.getAll()
 
 exports.start = () => {
   append(memo)
-  setInterval(iterate, 1000)
+  setInterval(iterate, 60 * 1000)
 }
 
 exports.getData = () => fs.readJSON(DATA_FILE)
