@@ -2,26 +2,37 @@
 
 const fs = require('fs-extra')
 const sensor = require('ds18x20')
-const { DATA_FILE, UPDATE_INTERVAL } = process.env
+const { DATA_FILE } = process.env
+
+const memo = sensor.getAll()
 
 exports.start = () => {
-  recordCurrentTemps()
-  setInterval(recordCurrentTemps, UPDATE_INTERVAL * 60 * 1000)
+  append(memo)
+  setInterval(iterate, 1000)
 }
 
-exports.getData = () => {
-  return fs.readJSON(DATA_FILE)
+exports.getData = () => fs.readJSON(DATA_FILE)
+
+async function iterate() {
+  const data = sensor.getAll()
+  const updated = Object.keys(data).reduce((accum, sensorId) => {
+    const current = data[sensorId]
+    const prev = memo[sensorId]
+    const diff = Math.abs(current - prev)
+    if (diff > .1) {
+      accum[sensorId] = current
+      memo[sensorId] = current
+    }
+    return accum
+  }, {})
+  if (Object.keys(updated) > 0) append(updated)
 }
 
-async function recordCurrentTemps() {
+async function append(values) {
   const data = fs.existsSync(DATA_FILE) ? await fs.readJSON(DATA_FILE) : []
-  const current = sensor.getAll()
-  const entry = [Date.now(), current]
-
-  console.log(current)
-
+  const entry = [Date.now(), values]
+  console.log(entry)
   data.push(entry)
-
   await fs.outputJSON(DATA_FILE, data)
 }
 
