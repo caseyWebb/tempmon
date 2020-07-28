@@ -69,7 +69,7 @@
     const fetchCurrent = () => fetch('current', { cache: 'no-cache' }).then((res) => res.json())
 
     function createChartDatasets(data) {
-      return data.map(([_date, temps]) => {
+      const pointsGroupedBySensor = data.map(([_date, temps]) => {
         const date = new Date(_date)
         return Object.keys(temps).map((sensor) => {
           const temp = temps[sensor]
@@ -82,17 +82,19 @@
           }
         })
       }).reduce((accum, points) => {
-        points.forEach(({ sensor, point }, i) => {
-          if (!accum[i]) accum[i] = {
-            label: labels[sensor] || sensor,
-            borderColor: colors[i],
-            fill: false,
-            data: []
-          }
-          accum[i].data.push(point)
+        points.forEach(({ sensor, point }) => {
+          if (!accum[sensor]) accum[sensor] = []
+          accum[sensor].push(point)
         })
         return accum
-      }, [])
+      }, {})
+
+      return Object.keys(pointsGroupedBySensor).map((sensor, i) => ({
+        label: labels[sensor] || sensor,
+        borderColor: colors[i],
+        fill: false,
+        data: pointsGroupedBySensor[sensor]
+      }))
     }
 
     function initialize() {
