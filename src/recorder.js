@@ -17,7 +17,7 @@ async function iterate() {
     const current = data[sensorId]
     const prev = memo[sensorId]
     const diff = Math.abs(current - prev)
-    console.log(`${sensor}: ${current} (memo: ${prev})`)
+    console.log(`${sensorId}: ${current} (memo: ${prev})`)
     if (diff > 0) {
       accum[sensorId] = current
       memo[sensorId] = current
