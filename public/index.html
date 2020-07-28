@@ -34,8 +34,8 @@
     }
 
 
-    const fetchHistoricalData = () => fetch('data').then((res) => res.json())
-    const fetchCurrent = () => fetch('current').then((res) => res.json())
+    const fetchHistoricalData = () => fetch('data', { cache: 'no-cache' }).then((res) => res.json())
+    const fetchCurrent = () => fetch('current', { cache: 'no-cache' }).then((res) => res.json())
 
     function createChartDatasets(data) {
       return data.map(([_date, temps]) => {
