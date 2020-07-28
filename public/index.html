@@ -34,7 +34,7 @@
     <!-- ko foreach: sensors -->
     <div class="sensor" data-bind="style: { color: color, borderColor: color }">
       <div class="temp" data-bind="text: temp"></div>
-      <div class="label" data-bind="text: label, click: aliasSensor"></div>
+      <div class="label" data-bind="text: label, click: $root.aliasSensor"></div>
     </div>
     <!-- /ko -->
   </div>
