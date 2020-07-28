@@ -5,7 +5,6 @@ Description=DS18B20 Temperature Logging
 ExecStart=/path/to/tempmon/bin/tempmon
 Restart=always
 Environment="DATA_FILE=/var/tempmon/data.json"
-Environment="UPDATE_INTERVAL=15"
 
 [Install]
 WantedBy=multi-user.target
