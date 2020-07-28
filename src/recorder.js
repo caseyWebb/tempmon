@@ -1,7 +1,6 @@
 'use strict'
 
 const fs = require('fs-extra')
-const { promisify: pify } = require('util')
 const sensor = require('ds18x20')
 const { DATA_FILE } = process.env
 
@@ -13,7 +12,7 @@ exports.start = () => {
 }
 
 async function iterate() {
-  const data = await pify(sensor.getAll)()
+  const data = await new Promise((resolve) => sensor.getAll((err, _data) => resolve(data)))
   const updated = Object.keys(data).reduce((accum, sensorId) => {
     const current = data[sensorId]
     const prev = memo[sensorId]
