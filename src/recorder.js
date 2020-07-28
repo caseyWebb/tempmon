@@ -17,7 +17,8 @@ async function iterate() {
     const current = data[sensorId]
     const prev = memo[sensorId]
     const diff = Math.abs(current - prev)
-    if (diff > .0) {
+    console.log(`${sensor}: ${current} (memo: ${prev})`)
+    if (diff > 0) {
       accum[sensorId] = current
       memo[sensorId] = current
     }
@@ -29,7 +30,7 @@ async function iterate() {
 async function append(values) {
   const data = fs.existsSync(DATA_FILE) ? await fs.readJSON(DATA_FILE) : []
   const entry = [Date.now(), values]
-  console.log(entry)
+  console.log('Appending entry:', entry)
   data.push(entry)
   await fs.outputJSON(DATA_FILE, data)
 }
