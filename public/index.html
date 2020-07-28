@@ -73,12 +73,9 @@
           createChartDatasets([...data, [Date.now(), current]])
         )
         updateCurrent(current)
+        currentAutoUpdate()
         viewModel.ready(true)
       })
-
-      setInterval(() => {
-        fetchCurrent().then(updateCurrent)
-      }, 5000) // 5 sec
 
       setInterval(() => {
         Promise.all([
@@ -88,6 +85,10 @@
           createChartDatasets([...data, [Date.now(), current]])
         ))
       }, 5 * 60 * 1000) // 5 min
+    }
+
+    function currentAutoUpdate() {
+      fetchCurrent().then(updateCurrent).then(currentAutoUpdate)
     }
 
     function updateCurrent(data) {
