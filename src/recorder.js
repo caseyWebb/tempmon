@@ -11,8 +11,6 @@ exports.start = () => {
   setInterval(iterate, 60 * 1000)
 }
 
-exports.getData = () => fs.readJSON(DATA_FILE)
-
 async function iterate() {
   const data = sensor.getAll()
   const updated = Object.keys(data).reduce((accum, sensorId) => {
