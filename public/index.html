@@ -20,7 +20,7 @@
       '#00746C',
       '#030E46'
     ]
-
+    const labels = JSON.parse(localStorage.getItem('labels')) || {}
     const ctx = document.getElementById('graph').getContext('2d');
 
     fetch('data').then((res) => res.json()).then((data) => {
@@ -30,7 +30,7 @@
         return Object.keys(temps).map((sensorName) => {
           const temp = temps[sensorName]
           return {
-            label: sensorName,
+            sensor,
             point: {
               x: date,
               y: temps[sensorName]
@@ -38,9 +38,9 @@
           }
         })
       }).reduce((accum, points) => {
-        points.forEach(({ label, point }, i) => {
+        points.forEach(({ sensor, point }, i) => {
           if (!accum[i]) accum[i] = {
-            label,
+            label: labels[sensor] || sensor,
             borderColor: colors[i],
             fill: false,
             data: []
