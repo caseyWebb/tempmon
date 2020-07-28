@@ -5,14 +5,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>tempmon</title>
+
+  <style>
+    .sensors {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .sensor {
+      padding: 20px;
+    }
+
+    .sensor .temp {
+      font-size: 36px;
+    }
+
+    .sensor .label {
+      font-size: 16px;
+    }
+  </style>
 </head>
 
 <body>
-  <div>
+  <div class="sensors">
     <!-- ko foreach: sensors -->
     <div data-bind="style: { color: color, borderColor: color }">
-      <span data-bind="text: temp"></span>
-      <span data-bind="text: label"></span>
+      <div class="temp" data-bind="text: temp"></div>
+      <div class="label" data-bind="text: label"></div>
     </div>
     <!-- /ko -->
   </div>
