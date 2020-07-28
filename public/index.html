@@ -27,13 +27,13 @@
       window.data = data
       const datasets = data.map(([unixTime, temps]) => {
         const date = new Date(unixTime)
-        return Object.keys(temps).map((sensorName) => {
-          const temp = temps[sensorName]
+        return Object.keys(temps).map((sensor) => {
+          const temp = temps[sensor]
           return {
             sensor,
             point: {
               x: date,
-              y: temps[sensorName]
+              y: temps[sensor]
             }
           }
         })
