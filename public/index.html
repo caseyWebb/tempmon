@@ -33,7 +33,6 @@
       current: ko.observableArray()
     }
 
-    initialize()
 
     const fetchHistoricalData = () => fetch('data').then((res) => res.json())
     const fetchCurrent = () => fetch('current').then((res) => res.json())
@@ -128,6 +127,8 @@
         }
       })
     }
+
+    initialize()
   </script>
 </body>
 
