@@ -31,10 +31,50 @@
     .sensor .label {
       font-size: 16px;
     }
+
+    .loader-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Courtesy of loading.io/css */
+    .lds-dual-ring {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+    }
+
+    .lds-dual-ring:after {
+      content: " ";
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border-radius: 50%;
+      border: 6px solid #030E46;
+      border-color: #030E46 transparent #030E46 transparent;
+      animation: lds-dual-ring 1.2s linear infinite;
+    }
+
+    @keyframes lds-dual-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 
 <body>
+  <div class="loader-container">
+    <div class="lds-dual-ring"></div>
+  </div>
+
   <div class="sensors">
     <!-- ko foreach: sensors -->
     <div class="sensor" data-bind="style: { color: color, borderColor: color }">
