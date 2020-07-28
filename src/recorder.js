@@ -23,7 +23,7 @@ async function iterate() {
     }
     return accum
   }, {})
-  if (Object.keys(updated) > 0) append(updated)
+  if (Object.keys(updated).length > 0) append(updated)
 }
 
 async function append(values) {
