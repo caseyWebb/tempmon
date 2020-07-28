@@ -23,7 +23,7 @@
     const labels = JSON.parse(localStorage.getItem('labels')) || {}
     const ctx = document.getElementById('graph').getContext('2d');
 
-    const [data, current] = Promise.all([
+    Promise.all([
       fetch('data').then((res) => res.json()),
       fetch('current').then((res) => res.json())
     ]).then(([data, current]) => {
