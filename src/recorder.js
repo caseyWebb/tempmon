@@ -8,7 +8,7 @@ const memo = sensor.getAll()
 
 exports.start = () => {
   append(memo)
-  setInterval(iterate, 60 * 1000)
+  setInterval(iterate, 5 * 60 * 1000) // 5 minutes
 }
 
 exports.current = memo
@@ -19,7 +19,7 @@ async function iterate() {
     const current = data[sensorId]
     const prev = memo[sensorId]
     const diff = Math.abs(current - prev)
-    if (diff > .1) {
+    if (diff > .0) {
       accum[sensorId] = current
       memo[sensorId] = current
     }
