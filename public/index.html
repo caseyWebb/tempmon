@@ -188,6 +188,9 @@
         })
         return accum
       }, [])
+      Object.keys(memo).forEach((sensor) => {
+        memo[sensor].delta = memo[sensor].max - memo[sensor].min
+      })
       ret.push([currentDate, memo])
       return ret
     }
