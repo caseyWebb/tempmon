@@ -189,10 +189,14 @@
     }
 
     function drawDailyChart(datasets) {
+      const oneDayAgo = new Date(new Date().setDate(new Date().getDate() - 1))
       return new Chart(ctx, {
         type: 'line',
         data: {
-          datasets
+          datasets: datasets.map((ds) => {
+            ds.data = ds.data.filter(({ x: time }) => time >= oneDayAgo)
+            return ds
+          })
         },
         options: {
           scales: {
@@ -200,8 +204,7 @@
               type: 'time',
               time: {
                 unit: 'hour'
-              },
-              min: new Date(new Date().setDate(new Date().getDate() - 1))
+              }
             }],
             yAxes: [
               {
