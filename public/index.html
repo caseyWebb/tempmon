@@ -170,7 +170,7 @@
     function aggregateData(data) {
       let memo = {}
       let currentDate = new Date(data[0][0])
-      return data.reduce((accum, [_date, temps]) => {
+      const ret = data.reduce((accum, [_date, temps]) => {
         const date = new Date(_date)
         if (date.getDate() !== currentDate.getDate()) {
           Object.keys(memo).forEach((sensor) => {
@@ -188,6 +188,8 @@
         })
         return accum
       }, [])
+      ret.push(memo)
+      return ret
     }
 
     function drawDailyChart(_data) {
