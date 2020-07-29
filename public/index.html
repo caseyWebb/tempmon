@@ -130,7 +130,7 @@
       fetchHistoricalData().then((data) => {
         drawDailyChart(data)
         drawAggregateCharts(data)
-        updateCurrent(data[data.length - 1])
+        updateCurrent(data[data.length - 1][1])
         currentAutoUpdate()
         ko.applyBindings(viewModel, document.body)
         document.getElementById('loader').remove()
