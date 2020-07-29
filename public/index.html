@@ -97,6 +97,7 @@
     integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
     crossorigin="anonymous"></script>
   <script>
+    const api = localStorage.getItem('api') || ''
     const colors = [
       '#37CF62',
       '#8EDFD9',
@@ -116,8 +117,8 @@
       }
     }
 
-    const fetchHistoricalData = () => fetch('data').then((res) => res.json())
-    const fetchCurrent = () => fetch('current').then((res) => res.json())
+    const fetchHistoricalData = () => fetch(api + '/data').then((res) => res.json())
+    const fetchCurrent = () => fetch(api + '/current').then((res) => res.json())
 
     function createChartDatasets(data) {
       const pointsGroupedBySensor = data.map(([_date, temps]) => {
