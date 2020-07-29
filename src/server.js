@@ -1,6 +1,7 @@
 'use strict'
 
 const path = require('path')
+const cors = require('cors')
 const sensor = require('ds18x20')
 const express = require('express')
 const app = express()
