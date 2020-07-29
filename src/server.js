@@ -14,7 +14,7 @@ exports.start = () => {
   }
 
   app.use(cors())
-  app.use(nocache())
+  app.use(nocache)
   app.use(express.static(path.resolve(__dirname, '../public')))
 
   app.get('/data', (req, res) => res.sendFile(DATA_FILE))
