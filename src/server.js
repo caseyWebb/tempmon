@@ -6,14 +6,20 @@ const express = require('express')
 const app = express()
 const { DATA_FILE, PORT } = process.env
 
-exports.start = () => {
-  app.use((req, res, next) => {
-    res.set('Cache-Control', 'no-store')
-    next()
-  })
+const nocache = (req, res, next) => {
+  res.set('Cache-Control', 'no-store')
+  next()
+}
 
-  app.use(express.static(path.resolve(__dirname, '../public')))
+const static = express.static(path.resolve(__dirname, '../public'))
+
+exports.start = () => {
+  app.use(cors())
+  app.use(nocache())
+  app.use(static)
+
   app.get('/data', (req, res) => res.sendFile(DATA_FILE))
+
   app.get('/current', (req, res) => sensor.getAll((err, data) => {
     if (err) res.err(err)
     else res.json(data)
