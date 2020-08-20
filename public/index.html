@@ -1,312 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tempmon</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>tempmon</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-
-  <style>
-    body,
-    html {
-      height: 100%;
-    }
-
-    .sensors {
-      display: flex;
-      justify-content: space-evenly;
-      flex-wrap: wrap;
-    }
-
-    .sensor {
-      padding: 20px;
-      text-align: center;
-      font-family: Roboto, sans;
-    }
-
-    .sensor .temp {
-      font-size: 36px;
-    }
-
-    .sensor .label {
-      font-size: 16px;
-    }
-
-    #loader {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Courtesy of loading.io/css */
-    .lds-dual-ring {
-      display: inline-block;
-      width: 80px;
-      height: 80px;
-    }
-
-    .lds-dual-ring:after {
-      content: " ";
-      display: block;
-      width: 64px;
-      height: 64px;
-      margin: 8px;
-      border-radius: 50%;
-      border: 6px solid #030E46;
-      border-color: #030E46 transparent #030E46 transparent;
-      animation: lds-dual-ring 1.2s linear infinite;
-    }
-
-    @keyframes lds-dual-ring {
-      0% {
-        transform: rotate(0deg);
+    <style>
+      body,
+      html {
+        height: 100%;
       }
 
-      100% {
-        transform: rotate(360deg);
+      .sensors {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
       }
-    }
-  </style>
-</head>
 
-<body>
-  <div id="loader">
-    <div class="lds-dual-ring"></div>
-  </div>
+      .sensor {
+        padding: 20px;
+        text-align: center;
+        font-family: Roboto, sans;
+      }
 
-  <div class="sensors">
-    <!-- ko foreach: sensors -->
-    <div class="sensor" data-bind="style: { color: color, borderColor: color }">
-      <div class="temp" data-bind="text: temp"></div>
-      <div class="label" data-bind="text: label, click: $root.aliasSensor"></div>
+      .sensor .temp {
+        font-size: 36px;
+      }
+
+      .sensor .label {
+        font-size: 16px;
+      }
+
+      #loader {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Courtesy of loading.io/css */
+      .lds-dual-ring {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+      }
+
+      .lds-dual-ring:after {
+        content: ' ';
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid #030e46;
+        border-color: #030e46 transparent #030e46 transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+      }
+
+      @keyframes lds-dual-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="loader">
+      <div class="lds-dual-ring"></div>
     </div>
-    <!-- /ko -->
-  </div>
-  <canvas id="daily-graph" height="100%"></canvas>
-  <canvas id="min-max-graph" height="100%"></canvas>
-  <canvas id="delta-graph" height="100%"></canvas>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.min.js"
-    integrity="sha512-vs7+jbztHoMto5Yd/yinM4/y2DOkPLt0fATcN+j+G4ANY2z4faIzZIOMkpBmWdcxt+596FemCh9M18NUJTZwvw=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"
-    integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
-    crossorigin="anonymous"></script>
-  <script>
-    const api = localStorage.getItem('api') || ''
-    const colors = [
-      '#37CF62',
-      '#8EDFD9',
-      '#53A8A5',
-      '#00746C',
-      '#030E46'
-    ]
-    const labelStorageKey = 'labels'
-    let labels = JSON.parse(localStorage.getItem(labelStorageKey)) || {}
-    const viewModel = {
-      sensors: ko.observableArray([]),
-      aliasSensor: ({ sensor }) => {
-        const alias = prompt(`Enter alias for ${sensor}`)
-        labels[sensor] = alias
-        localStorage.setItem(labelStorageKey, JSON.stringify(labels))
-      }
-    }
+    <div class="sensors">
+      <!-- ko foreach: sensors -->
+      <div
+        class="sensor"
+        data-bind="style: { color: color, borderColor: color }"
+      >
+        <div class="temp" data-bind="text: temp"></div>
+        <div
+          class="label"
+          data-bind="text: label, click: $root.aliasSensor"
+        ></div>
+      </div>
+      <!-- /ko -->
+    </div>
+    <canvas id="daily-graph" height="100%"></canvas>
+    <canvas id="min-max-graph" height="100%"></canvas>
+    <canvas id="delta-graph" height="100%"></canvas>
 
-    const fetchCurrent = () => fetch(api + '/current').then((res) => res.json())
-    const fetchHistoricalData = () => Promise.all([
-      fetch(api + '/data').then((res) => res.json()),
-      fetchCurrent()
-    ]).then(([data, current]) => [...data, [Date.now(), current]])
-
-
-    function initialize() {
-      fetchHistoricalData().then((data) => {
-        drawDailyChart(data)
-        drawAggregateCharts(data)
-        updateCurrent(data[data.length - 1][1])
-        currentAutoUpdate()
-        ko.applyBindings(viewModel, document.body)
-        document.getElementById('loader').remove()
-      })
-
-      setInterval(() =>
-        fetchHistoricalData().then(drawDailyChart)
-        , 5 * 60 * 1000) // 5 min
-    }
-
-    function currentAutoUpdate() {
-      fetchCurrent().then(updateCurrent).then(currentAutoUpdate)
-    }
-
-    function updateCurrent(data) {
-      const sensors = Object.keys(data).map((sensor, i) => ({
-        sensor,
-        color: colors[i],
-        label: labels[sensor] || sensor,
-        temp: data[sensor]
-      }))
-      viewModel.sensors(sensors)
-      document.title = sensors.map(({ label, temp }) => `${label}: ${temp}`).join(' | ')
-    }
-
-    function groupDataBySensor(data) {
-      return data.reduce((accum, [_date, temps]) => {
-        const date = new Date(_date)
-        Object.keys(temps).forEach((sensorName) => {
-          if (!accum[sensorName]) accum[sensorName] = []
-          accum[sensorName].push({ date, temp: temps[sensorName] })
-        })
-        return accum
-      }, {})
-    }
-
-    function aggregateData(data) {
-      let memo = {}
-      let currentDate = new Date(data[0][0])
-      const ret = data.reduce((accum, [_date, temps]) => {
-        const date = new Date(_date)
-        if (date.getDate() !== currentDate.getDate()) {
-          Object.keys(memo).forEach((sensor) => {
-            memo[sensor].delta = memo[sensor].max - memo[sensor].min
-          })
-          accum.push([currentDate, memo])
-          memo = {}
-          currentDate = date
-        }
-        Object.keys(temps).forEach((sensor) => {
-          const temp = temps[sensor]
-          if (!memo[sensor]) memo[sensor] = { min: temp, max: temp }
-          else if (temp < memo[sensor].min) memo[sensor].min = temp
-          else if (temp > memo[sensor].max) memo[sensor].max = temp
-        })
-        return accum
-      }, [])
-      Object.keys(memo).forEach((sensor) => {
-        memo[sensor].delta = memo[sensor].max - memo[sensor].min
-      })
-      ret.push([currentDate, memo])
-      return ret
-    }
-
-    function drawDailyChart(_data) {
-      const data = groupDataBySensor(_data)
-      const oneDayAgo = new Date(new Date().setDate(new Date().getDate() - 1))
-      const datasets = Object.keys(data).map((sensor, i) => ({
-        label: labels[sensor] || sensor,
-        borderColor: colors[i],
-        fill: false,
-        data: data[sensor].map(({ date, temp }) => ({ x: date, y: temp }))
-      }))
-      return new Chart(document.getElementById('daily-graph').getContext('2d'), {
-        type: 'line',
-        data: {
-          datasets: datasets.map((ds) => {
-            ds.data = ds.data.filter(({ x: time }) => time >= oneDayAgo)
-            return ds
-          })
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.min.js"
+      integrity="sha512-vs7+jbztHoMto5Yd/yinM4/y2DOkPLt0fATcN+j+G4ANY2z4faIzZIOMkpBmWdcxt+596FemCh9M18NUJTZwvw=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"
+      integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      const api = localStorage.getItem('api') || ''
+      const colors = ['#37CF62', '#8EDFD9', '#53A8A5', '#00746C', '#030E46']
+      const labelStorageKey = 'labels'
+      let labels = JSON.parse(localStorage.getItem(labelStorageKey)) || {}
+      const viewModel = {
+        sensors: ko.observableArray([]),
+        aliasSensor: ({ sensor }) => {
+          const alias = prompt(`Enter alias for ${sensor}`)
+          labels[sensor] = alias
+          localStorage.setItem(labelStorageKey, JSON.stringify(labels))
         },
-        options: {
-          scales: {
-            xAxes: [{
-              type: 'time',
-              time: {
-                unit: 'hour'
-              }
-            }],
-            yAxes: [
-              {
-                type: 'linear',
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Temperature (Celsius)'
-                }
-              }
-            ]
-          }
-        }
-      })
-    }
+      }
 
-    function drawAggregateCharts(_data) {
-      const data = groupDataBySensor(aggregateData(_data))
-      new Chart(document.getElementById('min-max-graph').getContext('2d'), {
-        type: 'line',
-        data: {
-          datasets: Object.keys(data).flatMap((sensor, i) =>
-            ['min', 'max'].map((metric) => ({
-              label: `${labels[sensor] || sensor} (${metric})`,
+      const now = new Date()
+      const [yyyy, M, d] = [now.getFullYear(), now.getMonth(), now.getDate()]
+      const fetchCurrent = () =>
+        fetch(api + '/current').then((res) => res.json())
+      const fetchHistoricalData = () =>
+        Promise.all([
+          fetch(api + `/data/${yyyy}-${M}-${d}.json`).then((res) => res.json()),
+          fetchCurrent(),
+        ]).then(([data, current]) => [...data, [Date.now(), current]])
+
+      function initialize() {
+        fetchHistoricalData().then((data) => {
+          drawDailyChart(data)
+          drawAggregateCharts(data)
+          updateCurrent(data[data.length - 1][1])
+          currentAutoUpdate()
+          ko.applyBindings(viewModel, document.body)
+          document.getElementById('loader').remove()
+        })
+
+        setInterval(
+          () => fetchHistoricalData().then(drawDailyChart),
+          5 * 60 * 1000
+        ) // 5 min
+      }
+
+      function currentAutoUpdate() {
+        fetchCurrent().then(updateCurrent).then(currentAutoUpdate)
+      }
+
+      function updateCurrent(data) {
+        const sensors = Object.keys(data).map((sensor, i) => ({
+          sensor,
+          color: colors[i],
+          label: labels[sensor] || sensor,
+          temp: data[sensor],
+        }))
+        viewModel.sensors(sensors)
+        document.title = sensors
+          .map(({ label, temp }) => `${label}: ${temp}`)
+          .join(' | ')
+      }
+
+      function groupDataBySensor(data) {
+        return data.reduce((accum, [_date, temps]) => {
+          const date = new Date(_date)
+          Object.keys(temps).forEach((sensorName) => {
+            if (!accum[sensorName]) accum[sensorName] = []
+            accum[sensorName].push({ date, temp: temps[sensorName] })
+          })
+          return accum
+        }, {})
+      }
+
+      function aggregateData(data) {
+        let memo = {}
+        let currentDate = new Date(data[0][0])
+        const ret = data.reduce((accum, [_date, temps]) => {
+          const date = new Date(_date)
+          if (date.getDate() !== currentDate.getDate()) {
+            Object.keys(memo).forEach((sensor) => {
+              memo[sensor].delta = memo[sensor].max - memo[sensor].min
+            })
+            accum.push([currentDate, memo])
+            memo = {}
+            currentDate = date
+          }
+          Object.keys(temps).forEach((sensor) => {
+            const temp = temps[sensor]
+            if (!memo[sensor]) memo[sensor] = { min: temp, max: temp }
+            else if (temp < memo[sensor].min) memo[sensor].min = temp
+            else if (temp > memo[sensor].max) memo[sensor].max = temp
+          })
+          return accum
+        }, [])
+        Object.keys(memo).forEach((sensor) => {
+          memo[sensor].delta = memo[sensor].max - memo[sensor].min
+        })
+        ret.push([currentDate, memo])
+        return ret
+      }
+
+      function drawDailyChart(_data) {
+        const data = groupDataBySensor(_data)
+        const oneDayAgo = new Date(new Date().setDate(new Date().getDate() - 1))
+        const datasets = Object.keys(data).map((sensor, i) => ({
+          label: labels[sensor] || sensor,
+          borderColor: colors[i],
+          fill: false,
+          data: data[sensor].map(({ date, temp }) => ({ x: date, y: temp })),
+        }))
+        return new Chart(
+          document.getElementById('daily-graph').getContext('2d'),
+          {
+            type: 'line',
+            data: {
+              datasets: datasets.map((ds) => {
+                ds.data = ds.data.filter(({ x: time }) => time >= oneDayAgo)
+                return ds
+              }),
+            },
+            options: {
+              scales: {
+                xAxes: [
+                  {
+                    type: 'time',
+                    time: {
+                      unit: 'hour',
+                    },
+                  },
+                ],
+                yAxes: [
+                  {
+                    type: 'linear',
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Temperature (Celsius)',
+                    },
+                  },
+                ],
+              },
+            },
+          }
+        )
+      }
+
+      function drawAggregateCharts(_data) {
+        const data = groupDataBySensor(aggregateData(_data))
+        new Chart(document.getElementById('min-max-graph').getContext('2d'), {
+          type: 'line',
+          data: {
+            datasets: Object.keys(data).flatMap((sensor, i) =>
+              ['min', 'max'].map((metric) => ({
+                label: `${labels[sensor] || sensor} (${metric})`,
+                borderColor: colors[i],
+                fill: false,
+                data: data[sensor].map((point) => ({
+                  x: point.date,
+                  y: point.temp[metric],
+                })),
+              }))
+            ),
+          },
+          options: {
+            scales: {
+              xAxes: [
+                {
+                  type: 'time',
+                  time: {
+                    unit: 'day',
+                  },
+                },
+              ],
+              yAxes: [
+                {
+                  type: 'linear',
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Temperature (Celsius)',
+                  },
+                },
+              ],
+            },
+          },
+        })
+        new Chart(document.getElementById('delta-graph').getContext('2d'), {
+          type: 'line',
+          data: {
+            datasets: Object.keys(data).map((sensor, i) => ({
+              label: `${labels[sensor] || sensor} (delta)`,
               borderColor: colors[i],
               fill: false,
               data: data[sensor].map((point) => ({
                 x: point.date,
-                y: point.temp[metric]
-              }))
-            })))
-        },
-        options: {
-          scales: {
-            xAxes: [{
-              type: 'time',
-              time: {
-                unit: 'day'
-              }
-            }],
-            yAxes: [
-              {
-                type: 'linear',
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Temperature (Celsius)'
-                }
-              }
-            ]
-          }
-        }
-      })
-      new Chart(document.getElementById('delta-graph').getContext('2d'), {
-        type: 'line',
-        data: {
-          datasets: Object.keys(data).map((sensor, i) => ({
-            label: `${labels[sensor] || sensor} (delta)`,
-            borderColor: colors[i],
-            fill: false,
-            data: data[sensor].map((point) => ({
-              x: point.date,
-              y: point.temp.delta
-            }))
-          }))
-        },
-        options: {
-          scales: {
-            xAxes: [{
-              type: 'time',
-              time: {
-                unit: 'day'
-              }
-            }],
-            yAxes: [
-              {
-                type: 'linear',
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Temperature (Celsius)'
-                }
-              }
-            ]
-          }
-        }
-      })
-    }
+                y: point.temp.delta,
+              })),
+            })),
+          },
+          options: {
+            scales: {
+              xAxes: [
+                {
+                  type: 'time',
+                  time: {
+                    unit: 'day',
+                  },
+                },
+              ],
+              yAxes: [
+                {
+                  type: 'linear',
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Temperature (Celsius)',
+                  },
+                },
+              ],
+            },
+          },
+        })
+      }
 
-    initialize()
-  </script>
-</body>
-
+      initialize()
+    </script>
+  </body>
 </html>

@@ -2,9 +2,10 @@
 Description=DS18B20 Temperature Logging
 
 [Service]
-ExecStart=/path/to/tempmon/bin/tempmon
+ExecStart=</path/to/tempmon/bin/tempmon>
 Restart=always
-Environment="DATA_FILE=/var/tempmon/data.json"
+Environment="DATA_DIRECTORY=/var/tempmon/data"
+Environment="PORT=80"
 
 [Install]
 WantedBy=multi-user.target
