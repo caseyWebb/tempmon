@@ -1,14 +1,14 @@
-'use strict'
+import path  from 'path' 
+import cors  from 'cors' 
+import sensor  from 'ds18x20' 
+import express, { Request, Response }  from 'express'
 
-const path = require('path')
-const cors = require('cors')
-const sensor = require('ds18x20')
-const express = require('express')
+import { DATA_FILE, PORT } from './config'
+
 const app = express()
-const { DATA_FILE, PORT } = process.env
 
-exports.start = () => {
-  const nocache = (req, res, next) => {
+export const start = () => {
+  const nocache = (req: Request, res: Response, next: () => void) => {
     res.set('Cache-Control', 'no-store')
     next()
   }
@@ -20,7 +20,7 @@ exports.start = () => {
   app.get('/data', (req, res) => res.sendFile(DATA_FILE))
 
   app.get('/current', (req, res) => sensor.getAll((err, data) => {
-    if (err) res.err(err)
+    if (err) res.status(500).send(err)
     else res.json(data)
   }))
 

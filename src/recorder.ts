@@ -1,18 +1,17 @@
-'use strict'
 
-const fs = require('fs-extra')
-const sensor = require('ds18x20')
-const { DATA_FILE } = process.env
+import fs  from 'fs-extra'
+import sensor, { SensorData } from 'ds18x20'
+import { DATA_FILE } from './config'
 
 const memo = sensor.getAll()
 
-exports.start = () => {
+export const start = () => {
   append(memo)
   setInterval(iterate, 5 * 60 * 1000) // 5 minutes
 }
 
 async function iterate() {
-  const data = await new Promise((resolve) => sensor.getAll((err, _data) => resolve(_data)))
+  const data = await new Promise<SensorData>((resolve) => sensor.getAll((err, _data) => resolve(_data)))
   const updated = Object.keys(data).reduce((accum, sensorId) => {
     const current = data[sensorId]
     const prev = memo[sensorId]
@@ -23,11 +22,11 @@ async function iterate() {
       memo[sensorId] = current
     }
     return accum
-  }, {})
+  }, {} as Record<string, number>)
   if (Object.keys(updated).length > 0) append(updated)
 }
 
-async function append(values) {
+async function append(values: SensorData) {
   const data = fs.existsSync(DATA_FILE) ? await fs.readJSON(DATA_FILE) : []
   const entry = [Date.now(), values]
   console.log('Appending entry:', entry)
