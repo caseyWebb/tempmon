@@ -2,14 +2,12 @@
   "compilerOptions": {
     "incremental": true,
     "target": "es2015",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "./src",
     "importHelpers": true,
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": []
 }

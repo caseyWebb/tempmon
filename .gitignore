@@ -1,7 +1,14 @@
-dist/
+# dependencies
 node_modules/
 
+# compilation output
+bin/build
+public/app/
+
+# runtime files
 .env
 data.json
+
+# development files
 *.log
 *.tsbuildinfo
