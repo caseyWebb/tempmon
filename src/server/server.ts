@@ -16,7 +16,7 @@ export const start = (): void => {
 
   app.use(cors())
   app.use(nocache)
-  app.use(express.static(path.resolve(__dirname, '../public')))
+  app.use(express.static(path.resolve(__dirname, '../../public')))
   app.use(express.static(DATA_DIRECTORY))
 
   app.get('/current', (req, res) =>
