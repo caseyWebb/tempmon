@@ -7,6 +7,7 @@ export const temperatureScale = {
     labelString: 'Temperature',
   },
   ticks: {
+    stepSize: 2,
     callback: (value: number) => `${value}° C / ${cToF(value).toFixed(1)}° F`,
   },
 }

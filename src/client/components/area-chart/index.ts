@@ -1,10 +1,12 @@
 import { Chart, ChartPoint } from 'chart.js'
 import ko from 'knockout'
+import moment from 'moment'
 
 import { Sensor } from '../../lib/sensors'
 
 import template from './template.html'
 import { temperatureScale } from '../../lib/chart-scales'
+import { cToF } from '../../lib/cToF'
 
 type LineChartComponentParams = {
   sensors: ko.ObservableArray<Sensor>
@@ -39,7 +41,6 @@ class ViewModel {
           backgroundColor: transparent(s.color),
           data: d,
           order: data.length - i,
-          pointRadius: 0,
         }))
       })
     ).then((datasets) => {
@@ -75,6 +76,55 @@ class ViewModel {
               },
             ],
             yAxes: [temperatureScale],
+          },
+          tooltips: {
+            xPadding: 20,
+            yPadding: 20,
+            cornerRadius: 3,
+            titleAlign: 'center',
+            titleFontSize: 24,
+            titleMarginBottom: 20,
+            bodyAlign: 'center',
+            bodyFontSize: 24,
+            displayColors: false,
+            callbacks: {
+              title: ([tooltipItem]) => {
+                const date = new Date(tooltipItem.xLabel as string)
+                return moment(date).format('MMMM D YYYY')
+              },
+              label: (tooltipItem, data) => {
+                if (
+                  !tooltipItem.index ||
+                  !tooltipItem.datasetIndex ||
+                  !data.datasets
+                )
+                  throw new Error()
+
+                const thisDataset = data.datasets[tooltipItem.datasetIndex]
+                const accompanyingDataset =
+                  tooltipItem.datasetIndex % 2 === 0
+                    ? data.datasets[tooltipItem.datasetIndex + 1]
+                    : data.datasets[tooltipItem.datasetIndex - 1]
+
+                if (!thisDataset.data || !accompanyingDataset.data)
+                  throw new Error()
+
+                const pointA = thisDataset.data[tooltipItem.index] as ChartPoint
+                const pointB = accompanyingDataset.data[
+                  tooltipItem.index
+                ] as ChartPoint
+
+                const max = Math.max(pointA.y as number, pointB.y as number)
+                const min = Math.min(pointA.y as number, pointB.y as number)
+                const diff = max - min
+
+                return `
+                ↓: ${min}°C / ${cToF(min).toFixed()}°F
+                ↑: ${max}°C / ${cToF(max).toFixed()}°F 
+                Δ: ${diff.toFixed(1)}°C / ${(diff * (9 / 5)).toFixed()}°F
+                `
+              },
+            },
           },
         },
       })

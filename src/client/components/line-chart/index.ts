@@ -1,5 +1,6 @@
-import { Chart } from 'chart.js'
+import { Chart, ChartDataSets, ChartPoint } from 'chart.js'
 import ko from 'knockout'
+import moment from 'moment'
 
 import { temperatureScale } from '../../lib/chart-scales'
 import { cToF } from '../../lib/cToF'
@@ -46,6 +47,29 @@ class ViewModel {
               },
             ],
             yAxes: [temperatureScale],
+          },
+          tooltips: {
+            xPadding: 20,
+            yPadding: 20,
+            cornerRadius: 3,
+            titleAlign: 'center',
+            titleFontSize: 24,
+            titleMarginBottom: 20,
+            bodyAlign: 'center',
+            bodyFontSize: 24,
+            displayColors: false,
+            callbacks: {
+              title: ([tooltipItem]) => {
+                const date = new Date(tooltipItem.xLabel as string)
+                return moment(date).format('MMM D YYYY, h:mm a')
+              },
+              label: (tooltipItem) => {
+                const degreesCelcius = parseFloat(tooltipItem.value as string)
+                return `${degreesCelcius}° C / ${cToF(degreesCelcius).toFixed(
+                  1
+                )}° F`
+              },
+            },
           },
         },
       })
