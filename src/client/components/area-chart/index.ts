@@ -4,6 +4,7 @@ import ko from 'knockout'
 import { Sensor } from '../../lib/sensors'
 
 import template from './template.html'
+import { temperatureScale } from '../../lib/chart-scales'
 
 type LineChartComponentParams = {
   sensors: ko.ObservableArray<Sensor>
@@ -73,15 +74,7 @@ class ViewModel {
                 },
               },
             ],
-            yAxes: [
-              {
-                type: 'linear',
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Temperature (Celsius)',
-                },
-              },
-            ],
+            yAxes: [temperatureScale],
           },
         },
       })

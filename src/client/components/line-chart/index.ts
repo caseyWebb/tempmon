@@ -1,6 +1,8 @@
 import { Chart } from 'chart.js'
 import ko from 'knockout'
 
+import { temperatureScale } from '../../lib/chart-scales'
+import { cToF } from '../../lib/cToF'
 import { Sensor } from '../../lib/sensors'
 
 import template from './template.html'
@@ -43,15 +45,7 @@ class ViewModel {
                 },
               },
             ],
-            yAxes: [
-              {
-                type: 'linear',
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Temperature (Celsius)',
-                },
-              },
-            ],
+            yAxes: [temperatureScale],
           },
         },
       })
