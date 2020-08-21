@@ -1,0 +1,25 @@
+.sensors {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+current-temp {
+  padding: 20px;
+  text-align: center;
+  font-family: Roboto, sans;
+}
+
+current-temp .temp {
+  font-size: 36px;
+}
+
+current-temp .label {
+  font-size: 16px;
+}
+
+app,
+current-temp,
+line-chart {
+  display: block;
+}

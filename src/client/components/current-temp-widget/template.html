@@ -1,0 +1,10 @@
+<div
+  class="sensor"
+  data-bind="style: { color: params.sensor.color, borderColor: params.sensor.color }"
+>
+  <div class="temp" data-bind="text: params.sensor.temp"></div>
+  <div
+    class="label"
+    data-bind="text: params.sensor.label, click: setAlias"
+  ></div>
+</div>

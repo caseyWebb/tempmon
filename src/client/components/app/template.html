@@ -1,0 +1,15 @@
+<div class="sensors">
+  <!-- ko foreach: params.sensors -->
+  <current-temp params="sensor: $data"></current-temp>
+  <!-- /ko -->
+</div>
+
+<line-chart
+  style="height: 100%; width: 100%;"
+  params="sensors: params.sensors, getData: getRawData, unit: 'hour'"
+></line-chart>
+
+<line-chart
+  style="height: 100%; width: 100%;"
+  params="sensors: params.sensors, getData: getAggregateData, unit: 'day'"
+></line-chart>

@@ -9,7 +9,7 @@ const HTMLWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   mode: 'development',
   devtool: 'source-map',
-  entry: './src/client/app.tsx',
+  entry: './src/client/index.ts',
   output: {
     path: path.resolve(__dirname, 'public/app'),
     publicPath: '/app/',
@@ -19,23 +19,35 @@ module.exports = {
     contentBase: path.resolve(__dirname, 'public'),
   },
   resolve: {
-    alias: {
-      react: 'preact/compat',
-      'react-dom/test-utils': 'preact/test-utils',
-      'react-dom': 'preact/compat', // Must be below test-utils
-    },
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.js'],
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: {
           loader: 'ts-loader',
           options: {
             configFile: 'tsconfig.client.json',
           },
         },
+      },
+      {
+        test: /\.html$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            attributes: false,
+            minimize: {
+              removeAttributeQuotes: false,
+              ignoreCustomComments: [/^\s*\/?ko/],
+            },
+          },
+        },
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
