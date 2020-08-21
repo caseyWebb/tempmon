@@ -15,19 +15,18 @@ export const start = (): void => {
   }
 
   app.use(cors())
-  app.use(nocache)
   app.use(express.static(path.resolve(__dirname, '../../public')))
 
   app.get('/', (req, res) => res.redirect('/app'))
 
-  app.get('/current', (req, res) =>
+  app.get('/current', nocache, (req, res) =>
     sensor.getAll((err, data) => {
       if (err) res.status(500).send(err)
       else res.json(data)
     })
   )
 
-  app.use('/data', express.static(DATA_DIRECTORY))
+  app.use('/data', nocache, express.static(DATA_DIRECTORY))
 
   app.listen(PORT)
 }
