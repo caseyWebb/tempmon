@@ -1,8 +1,9 @@
-.sensors {
+.page {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
   height: 100vmin;
+  margin-bottom: 5vmin;
 }
 
 current-temp {
@@ -18,13 +19,23 @@ current-temp {
   font-family: Roboto, sans;
 }
 
-current-temp .sensor {
+current-temp .card {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   justify-content: center;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: 2px;
+}
+
+current-temp .loader {
+  margin-bottom: 2vmin;
+}
+
+current-temp .lds-dual-ring:after {
+  border: 6px solid rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9) transparent rgba(255, 255, 255, 0.9)
+    transparent;
 }
 
 current-temp .temp {

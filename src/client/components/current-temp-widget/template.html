@@ -1,4 +1,9 @@
-<div class="sensor" data-bind="style: { backgroundColor: params.sensor.color }">
+<div class="card" data-bind="style: { backgroundColor: params.sensor.color }">
+  <!-- ko ifnot: params.sensor.temp -->
+  <div class="loader">
+    <div class="lds-dual-ring"></div>
+  </div>
+  <!-- /ko -->
   <div class="temp" data-bind="text: params.sensor.temp"></div>
   <div
     class="label"
