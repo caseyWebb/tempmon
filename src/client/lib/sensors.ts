@@ -56,10 +56,7 @@ export class Sensor {
   constructor(public readonly id: string, public readonly color: string) {
     this.db.then(() => this.ready(true))
 
-    this.label.subscribe((l) => {
-      localStorage.setItem(this.labelStorageKey, l)
-      this.label(this.id)
-    })
+    this.label.subscribe((l) => localStorage.setItem(this.labelStorageKey, l))
   }
 
   public async insert(readings: [number, number][]) {
