@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  height: 100vh;
+  min-height: 100vh;
   margin-bottom: 5vmin;
 }
 
@@ -19,6 +19,27 @@ current-temp {
   font-family: Roboto, sans;
 }
 
+@media only screen and (max-width: 1900px) {
+  current-temp {
+    padding: 0;
+    margin: 1vmin;
+    height: 30vmin;
+    width: 30vmin;
+  }
+}
+@media only screen and (max-width: 1200px) {
+  html,
+  body,
+  current-temp {
+    padding: 0;
+    margin: 0;
+  }
+  current-temp {
+    min-height: 105px;
+    height: 20vh;
+    width: 100%;
+  }
+}
 current-temp .card {
   display: flex;
   flex-direction: column;
@@ -39,11 +60,11 @@ current-temp .lds-dual-ring:after {
 }
 
 current-temp .temp {
-  font-size: max(10vmin, 36px);
+  font-size: max(10vmin, 48px);
 }
 
 current-temp .label {
-  font-size: max(1.5vmin, 16px);
+  font-size: max(1.5vmin, 24px);
   cursor: pointer;
 }
 

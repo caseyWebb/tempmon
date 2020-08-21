@@ -1,4 +1,4 @@
-import { Chart, ChartDataSets, ChartPoint } from 'chart.js'
+import { Chart } from 'chart.js'
 import ko from 'knockout'
 import moment from 'moment'
 
