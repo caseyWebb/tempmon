@@ -5,6 +5,26 @@
 const path = require('path')
 
 const HTMLWebpackPlugin = require('html-webpack-plugin')
+const OfflinePlugin = require('offline-plugin')
+const { IgnorePlugin } = require('webpack')
+
+const production = isProduction()
+
+const htmlTerserOptions = {
+  removeAttributeQuotes: false,
+  ignoreCustomComments: [/^\s*\/?ko/],
+  caseSensitive: true,
+  collapseWhitespace: true,
+  conservativeCollapse: true,
+  keepClosingSlash: true,
+  minifyCSS: true,
+  minifyJS: true,
+  removeComments: true,
+  removeRedundantAttributes: true,
+  removeScriptTypeAttributes: true,
+  removeStyleLinkTypeAttributes: true,
+  useShortDoctype: true,
+}
 
 module.exports = {
   mode: 'development',
@@ -19,6 +39,13 @@ module.exports = {
     contentBase: path.resolve(__dirname, 'public'),
   },
   resolve: {
+    alias: {
+      knockout$: path.resolve(
+        __dirname,
+        'node_modules/knockout/build/output',
+        production ? 'knockout-latest.js' : 'knockout-latest.debug.js'
+      ),
+    },
     extensions: ['.ts', '.js'],
   },
   module: {
@@ -38,10 +65,7 @@ module.exports = {
           loader: 'html-loader',
           options: {
             attributes: false,
-            minimize: {
-              removeAttributeQuotes: false,
-              ignoreCustomComments: [/^\s*\/?ko/],
-            },
+            minimize: htmlTerserOptions,
           },
         },
       },
@@ -52,8 +76,19 @@ module.exports = {
     ],
   },
   plugins: [
+    new IgnorePlugin(/^\.\/locale$/, /moment$/),
     new HTMLWebpackPlugin({
       template: 'src/client/index.html',
+      minify: htmlTerserOptions,
+    }),
+    new OfflinePlugin({
+      appShell: true,
     }),
   ],
+}
+
+function isProduction() {
+  const i = process.argv.indexOf('--mode')
+  if (i > 0) return process.argv[i + 1] === 'production'
+  return false
 }

@@ -30,6 +30,7 @@
     "eslint-config-profiscience": "^5.0.2",
     "html-loader": "^1.2.1",
     "html-webpack-plugin": "^4.3.0",
+    "offline-plugin": "^5.0.7",
     "prettier": "^2.0.5",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",
