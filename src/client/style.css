@@ -2,24 +2,41 @@
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  height: 100vmin;
 }
 
 current-temp {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  height: 40vmin;
+  width: 40vmin;
   padding: 20px;
+  margin: 3vmin;
+  color: rgba(255, 255, 255, 0.9);
   text-align: center;
   font-family: Roboto, sans;
 }
 
+current-temp .sensor {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 2px;
+}
+
 current-temp .temp {
-  font-size: 36px;
+  font-size: max(10vmin, 36px);
 }
 
 current-temp .label {
-  font-size: 16px;
+  font-size: max(1.5vmin, 16px);
+  cursor: pointer;
 }
 
 app,
-current-temp,
 line-chart {
   display: block;
 }
