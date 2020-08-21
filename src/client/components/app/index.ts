@@ -3,8 +3,9 @@ import ko from 'knockout'
 
 import { Sensor } from '../../lib/sensors'
 
+import '../area-chart'
 import '../current-temp-widget'
-import '../temp-line-chart'
+import '../line-chart'
 
 import template from './template.html'
 
@@ -23,12 +24,13 @@ ko.components.register('app', {
     protected async getAggregateData(s: Sensor): Promise<ChartPoint[][]> {
       const data = await s.fetchAggregateData()
       const metrics: (keyof typeof data[0])[] = ['min', 'max']
-      return data.map((dailyAggregate) =>
-        metrics.map((metric) => ({
+      const ret = metrics.map((metric) =>
+        data.map((dailyAggregate) => ({
           x: dailyAggregate.date,
           y: dailyAggregate[metric],
         }))
       )
+      return ret
     }
   },
 })

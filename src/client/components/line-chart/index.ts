@@ -5,11 +5,9 @@ import { Sensor } from '../../lib/sensors'
 
 import template from './template.html'
 
-type MaybeArray<T> = T | T[]
-
 type LineChartComponentParams = {
   sensors: ko.ObservableArray<Sensor>
-  getData(sensor: Sensor): Promise<MaybeArray<{ x: number; y: number }[]>>
+  getData(sensor: Sensor): Promise<{ x: number; y: number }[]>
   unit: 'hour' | 'day'
 }
 
@@ -22,29 +20,18 @@ class ViewModel {
     Promise.all(
       sensors().map(async (s) => {
         const data = await getData(s)
-        if (Array.isArray(data[0])) {
-          return (data as { x: number; y: number }[][]).map((d) => ({
-            label: s.label(),
-            borderColor: s.color,
-            fill: false,
-            data: d,
-          }))
-        } else {
-          return [
-            {
-              label: s.label(),
-              borderColor: s.color,
-              fill: false,
-              data: data as { x: number; y: number }[],
-            },
-          ]
+        return {
+          label: s.label(),
+          borderColor: s.color,
+          fill: false,
+          data,
         }
       })
     ).then((datasets) => {
       new Chart(ctx, {
         type: 'line',
         data: {
-          datasets: datasets.flat(),
+          datasets,
         },
         options: {
           scales: {
