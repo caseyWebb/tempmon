@@ -33,7 +33,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'public/app'),
     publicPath: '/app/',
-    filename: 'entry.js',
+    filename: 'entry.[chunkhash].js',
   },
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
@@ -82,7 +82,8 @@ module.exports = {
       minify: htmlTerserOptions,
     }),
     new OfflinePlugin({
-      appShell: true,
+      appShell: '/app/',
+      responseStrategy: 'cache-first',
     }),
   ],
 }
