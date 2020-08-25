@@ -15,7 +15,8 @@
     "build:client": "webpack --mode production",
     "build:server": "tsc --project ./tsconfig.server.json",
     "start": "./bin/tempmon",
-    "develop:client": "webpack-dev-server"
+    "develop:client": "webpack-dev-server",
+    "prepublishOnly": "rm -r public/app && yarn build"
   },
   "dependencies": {
     "cors": "^2.8.5",
