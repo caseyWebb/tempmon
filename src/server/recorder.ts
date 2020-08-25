@@ -1,22 +1,16 @@
-import sensor, { SensorData } from 'ds18x20'
-
 import { append } from './data'
+import * as sensors from './sensors'
 
-const memo = sensor.getAll()
+const memo = { ...sensors.current } // clone
 
 export const start = (): void => {
   append(memo)
-  setInterval(() => {
-    iterate().catch(console.error)
-  }, 5 * 60 * 1000) // 5 minutes
+  setInterval(iterate, 5 * 60 * 1000) // 5 minutes
 }
 
-async function iterate(): Promise<void> {
-  const data = await new Promise<SensorData>((resolve) =>
-    sensor.getAll((err, _data) => resolve(_data))
-  )
-  const updated = Object.keys(data).reduce((accum, sensorId) => {
-    const current = data[sensorId]
+function iterate(): void {
+  const updated = Object.keys(sensors.current).reduce((accum, sensorId) => {
+    const current = sensors.current[sensorId]
     const prev = memo[sensorId]
     const diff = Math.abs(current - prev)
     console.info(`${sensorId}: ${current} (memo: ${prev})`)
