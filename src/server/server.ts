@@ -10,19 +10,12 @@ import { DATA_DIRECTORY, PORT } from './config'
 const app = express()
 
 export const start = (): void => {
-  const servePublic = expressStaticGzip(
-    path.resolve(__dirname, '../../public'),
-    {
-      enableBrotli: true,
-    }
-  )
   const nocache = (req: Request, res: Response, next: () => void): void => {
     res.set('Cache-Control', 'no-store')
     next()
   }
 
   app.use(cors())
-  app.use(servePublic)
 
   app.get('/', (req, res) => res.redirect('/app'))
 
@@ -33,6 +26,11 @@ export const start = (): void => {
     })
   )
 
+  app.use(
+    expressStaticGzip(path.resolve(__dirname, '../../public'), {
+      enableBrotli: true,
+    })
+  )
   app.use('/data', nocache, express.static(DATA_DIRECTORY))
 
   app.listen(PORT)
