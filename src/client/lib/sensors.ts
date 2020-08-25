@@ -53,6 +53,8 @@ export class Sensor {
 
   private readonly ready = ko.observable(false)
 
+  private readonly onInsertCallbacks: (() => void)[] = []
+
   constructor(public readonly id: string, public readonly color: string) {
     this.db.then(() => this.ready(true))
 
@@ -68,6 +70,11 @@ export class Sensor {
       ),
       tx.done,
     ])
+    this.onInsertCallbacks.forEach((cb) => cb())
+  }
+
+  public onInsert(cb: () => void | Promise<void>) {
+    this.onInsertCallbacks.push(cb)
   }
 
   public async fetchAllData(
