@@ -11,7 +11,7 @@ import { cToF } from '../../lib/cToF'
 type LineChartComponentParams = {
   sensors: ko.ObservableArray<Sensor>
   getData(sensor: Sensor): Promise<[ChartPoint[], ChartPoint[]]>
-  unit: 'hour' | 'day'
+  timeScale: 'hour' | 'day'
 }
 
 function transparent(hex: string) {
@@ -26,7 +26,10 @@ function transparent(hex: string) {
 }
 
 class ViewModel {
-  constructor({ sensors, getData, unit }: LineChartComponentParams, el: Node) {
+  constructor(
+    { sensors, getData, timeScale }: LineChartComponentParams,
+    el: Node
+  ) {
     const ctx = (el.firstChild as HTMLCanvasElement).getContext(
       '2d'
     ) as CanvasRenderingContext2D
@@ -71,7 +74,7 @@ class ViewModel {
               {
                 type: 'time',
                 time: {
-                  unit,
+                  unit: timeScale,
                 },
               },
             ],
