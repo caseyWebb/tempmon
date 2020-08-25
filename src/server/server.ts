@@ -1,11 +1,11 @@
 import path from 'path'
 
 import cors from 'cors'
+import sensor from 'ds18x20'
 import express, { Request, Response } from 'express'
 import expressStaticGzip from 'express-static-gzip'
 
 import { DATA_DIRECTORY, PORT } from './config'
-import * as sensors from './sensors'
 
 const app = express()
 
@@ -26,7 +26,12 @@ export const start = (): void => {
 
   app.get('/', (req, res) => res.redirect('/app'))
 
-  app.get('/current', nocache, (req, res) => res.json(sensors.current))
+  app.get('/current', nocache, (req, res) =>
+    sensor.getAll((err, data) => {
+      if (err) res.status(500).send(err)
+      else res.json(data)
+    })
+  )
 
   app.use('/data', nocache, express.static(DATA_DIRECTORY))
 
