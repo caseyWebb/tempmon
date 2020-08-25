@@ -1,9 +1,12 @@
+import { SensorData } from 'ds18x20'
+
 import { append } from './data'
 import * as sensors from './sensors'
 
-const memo = { ...sensors.current } // clone
+const memo: SensorData = {}
 
 export const start = (): void => {
+  Object.assign(memo, sensors.current)
   append(memo)
   setInterval(iterate, 5 * 60 * 1000) // 5 minutes
 }
