@@ -4,6 +4,8 @@
 
 const path = require('path')
 
+const BrotliPlugin = require('brotli-webpack-plugin')
+const GzipPlugin = require('compression-webpack-plugin')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const OfflinePlugin = require('offline-plugin')
 const { IgnorePlugin } = require('webpack')
@@ -85,6 +87,8 @@ module.exports = {
       appShell: '/app/',
       responseStrategy: 'cache-first',
     }),
+    new GzipPlugin(),
+    new BrotliPlugin(),
   ],
 }
 
