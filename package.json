@@ -1,6 +1,6 @@
 {
   "name": "@caseywebb/tempmon",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "license": "WTFPL",
   "bin": {
     "tempmon": "./bin/tempmon"
