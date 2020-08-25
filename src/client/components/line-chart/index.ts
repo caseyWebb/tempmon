@@ -87,8 +87,8 @@ class ViewModel {
               return moment(date).format('MMM D YYYY, h:mm a')
             },
             label: (tooltipItem) => {
-              const degreesCelcius = parseFloat(tooltipItem.value as string)
-              return `${degreesCelcius}° C / ${cToF(degreesCelcius).toFixed(
+              const degreesCelsius = parseFloat(tooltipItem.value as string)
+              return `${degreesCelsius}° C / ${cToF(degreesCelsius).toFixed(
                 1
               )}° F`
             },
