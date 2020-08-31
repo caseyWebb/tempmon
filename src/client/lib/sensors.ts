@@ -33,7 +33,7 @@ export async function init() {
   currentAutoUpdate()
   const initialized = backfill()
   if (!sensorIds) await initialized
-  setInterval(() => fetchHistoricalData(new Date()), 5 * 60 * 1000) // 5 min
+  setInterval(() => fetchHistoricalData(new Date()).then(insert), 5 * 60 * 1000) // 5 min
   return sensors
 }
 
