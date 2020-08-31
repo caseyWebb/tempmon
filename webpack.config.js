@@ -10,8 +10,6 @@ const HTMLWebpackPlugin = require('html-webpack-plugin')
 const OfflinePlugin = require('offline-plugin')
 const { IgnorePlugin } = require('webpack')
 
-const production = isProduction()
-
 const htmlTerserOptions = {
   removeAttributeQuotes: false,
   ignoreCustomComments: [/^\s*\/?ko/],
@@ -40,14 +38,13 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
   },
+  externals: {
+    knockout: 'window.ko',
+    moment: 'window.moment',
+    'chart.js': 'window',
+    tslib: 'window',
+  },
   resolve: {
-    alias: {
-      knockout$: path.resolve(
-        __dirname,
-        'node_modules/knockout/build/output',
-        production ? 'knockout-latest.js' : 'knockout-latest.debug.js'
-      ),
-    },
     extensions: ['.ts', '.js'],
   },
   module: {
@@ -86,14 +83,21 @@ module.exports = {
     new OfflinePlugin({
       appShell: '/app/',
       responseStrategy: 'cache-first',
+      externals: [
+        '/android-chrome-192x192.png',
+        '/android-chrome-512x512.png',
+        '/apple-touch-icon.png',
+        '/favicon.ico',
+        '/favicon-16x16.png',
+        '/favicon-32x32.png',
+        '/site.webmanifest',
+        'https://cdnjs.cloudflare.com/ajax/libs/tslib/2.0.1/tslib.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js',
+      ],
     }),
     new GzipPlugin(),
     new BrotliPlugin(),
   ],
-}
-
-function isProduction() {
-  const i = process.argv.indexOf('--mode')
-  if (i > 0) return process.argv[i + 1] === 'production'
-  return false
 }

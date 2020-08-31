@@ -46,6 +46,7 @@
     "html-webpack-plugin": "^4.3.0",
     "idb": "^5.0.4",
     "knockout": "^3.5.1",
+    "moment": "^2.27.0",
     "offline-plugin": "^5.0.7",
     "prettier": "^2.1.1",
     "style-loader": "^1.2.1",
