@@ -77,10 +77,7 @@ export class Sensor {
     this.onInsertCallbacks.push(cb)
   }
 
-  public async fetchAllData(
-    start: Date = new Date(new Date().setDate(new Date().getDate() - 1)),
-    end: Date = new Date()
-  ) {
+  public async fetchAllData(start: Date, end: Date) {
     const range = IDBKeyRange.bound(start, end)
     return (await this.db)
       .transaction('readings')

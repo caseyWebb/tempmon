@@ -16,13 +16,6 @@ ko.components.register('app', {
       this.startScrollSnapping()
     }
 
-    protected async getRawData(s: Sensor): Promise<ChartPoint[]> {
-      return (await s.fetchAllData()).map(({ time, temp }) => ({
-        x: time,
-        y: temp,
-      }))
-    }
-
     protected async getAggregateData(s: Sensor): Promise<ChartPoint[][]> {
       const data = await s.fetchAggregateData()
       const metrics: (keyof typeof data[0])[] = ['min', 'max']
@@ -35,7 +28,7 @@ ko.components.register('app', {
       return ret
     }
 
-    private startScrollSnapping() {
+    private startScrollSnapping(): void {
       let timeout: number
       let prev = window.scrollY
       let scrollingUp = true
@@ -76,8 +69,10 @@ ko.components.register('app', {
       function snapToPage(scrollingUp: boolean): void {
         const threshold = scrollingUp ? vh(20) : vh(80)
         const page = pages.find((p) => p.offsetTop - window.scrollY < threshold)
-        if (page)
+        if (page) {
           window.scrollTo({ behavior: 'smooth', top: page.offsetTop - 50 })
+          page.focus()
+        }
       }
     }
   },
